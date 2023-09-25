@@ -1,0 +1,20 @@
+.messages {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.messages_field {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 12px;
+    height: 100%;
+}
+
+.form_input {
+    flex-grow: 1;
+    background: #0a2138;
+    padding: 5px;
+}

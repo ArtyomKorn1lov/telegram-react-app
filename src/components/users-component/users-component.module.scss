@@ -1,0 +1,18 @@
+.body_chat {
+    display: flex;
+    flex-grow: 1;
+}
+
+.users {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #0c3359;
+}
+
+.messages {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
