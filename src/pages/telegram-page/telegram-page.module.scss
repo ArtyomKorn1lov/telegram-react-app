@@ -1,0 +1,23 @@
+.page {
+    display: flex;
+    max-width: 1500px;
+    width: 90%;
+    min-height: 500px;
+    max-height: 600px;
+    flex-direction: column;
+    background: #225a92;
+    border: 7px solid #1976d2;
+    border-radius: 10px;
+    overflow-y: scroll;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: #0c3c6c;
+}
+
+.margin_right {
+    margin-right: 10px;
+}
