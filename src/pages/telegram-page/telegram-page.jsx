@@ -64,7 +64,7 @@ const TelegramPage = () => {
         <div className={styles.page}>
             <div className={styles.header}>
                 {isAuthorize && <AccountCircleIcon
-                    sx={{ width: '50px', height: '50px' }}
+                    sx={{ width: '50px', height: '50px', cursor: "pointer" }}
                     className={styles.margin_right}
                     onClick={() => onOpenRegistration()}
                 />}

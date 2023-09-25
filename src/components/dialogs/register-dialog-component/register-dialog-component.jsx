@@ -227,7 +227,7 @@ const RegisterDialogComponent = ({ onClose, open, edited }) => {
                 />
             </DialogContent>
             <DialogActions sx={{ justifyContent: "center", marginTop: "12px" }}>
-                <Button onClick={() => registerHandle()} variant="contained">Зарегистрироваться</Button>
+                <Button onClick={() => registerHandle()} variant="contained">{edited ? "Редактировать" : "Зарегистрироваться"}</Button>
             </DialogActions>
         </Dialog>
     );

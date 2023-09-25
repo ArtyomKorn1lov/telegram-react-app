@@ -138,7 +138,7 @@ const ChatComponent = () => {
         setText("");
     };
 
-    let sendIcon = <SendIcon onClick={addMessage} />;
+    let sendIcon = <SendIcon onClick={addMessage} sx={{cursor: "pointer"}} />;
     return (
         <div className={styles.messages}>
             <div className={styles.messages_field}>
