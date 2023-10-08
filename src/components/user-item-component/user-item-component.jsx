@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -7,15 +7,15 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../contexts/user-context";
+import { useSelector } from 'react-redux';
 
 const UserItemComponent = ({userItem}) => {
-    const userContex = useContext(UserContext);
+    const store = useSelector((state) => state);
     const navigate = useNavigate();
 
     let backgroundItem = "";
     // eslint-disable-next-line eqeqeq
-    if (userContex.chatId == userItem.id) {
+    if (store.chatId == userItem.id) {
         backgroundItem = "#1976d2";
     }
     return (

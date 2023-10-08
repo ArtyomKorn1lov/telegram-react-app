@@ -1,18 +1,18 @@
 import styles from "./chat-item-component.module.scss";
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from 'prop-types';
 import { Typography } from '@mui/material';
-import { UserContext } from "../../contexts/user-context";
+import { useSelector } from 'react-redux';
 
 const ChatItemComponent = ({message, editItem, index, curIndex}) => {
-    const userContext = useContext(UserContext);
+    const store = useSelector((state) => state);
 
     let messageItemClass = styles.messages_item_left;
     let messageTextAlign = styles.message_left;
     if (curIndex === index) {
         messageTextAlign = styles.message_left_selected;
     }
-    if (message.userId === userContext.user.id) {
+    if (message.userId === store.user.id) {
         messageItemClass = styles.messages_item_right;
         messageTextAlign = styles.message_right;
         if (curIndex === index) {

@@ -1,5 +1,5 @@
 import styles from "./chat-component.module.scss";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import ChatItemComponent from "../chat-item-component/chat-item-component";
@@ -10,29 +10,31 @@ import MessageUpdateModel from "../../models/MessageUpdateModel";
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useParams } from "react-router-dom";
-import { UserContext } from "../../contexts/user-context";
+import { useSelector, useDispatch } from 'react-redux';
+import { veryfyToken, getHeadAuthoriseData } from "../../store/create-store";
 
 const ChatComponent = () => {
-    const userContext = useContext(UserContext);
+    const store = useSelector((state) => state);
+    const dispatch = useDispatch();
     const { senderId } = useParams();
     const [messages, setMessages] = useState([]);
     const [text, setText] = useState("");
     const [curIndex, setIndex] = useState(-1);
 
     useEffect(() => {
-        userContext.chatIdSetter(senderId);
+        dispatch({ type: "setChatId", payload: senderId });
         getServerData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [senderId, userContext.user.id]);
+    }, [senderId, store.user.id]);
 
     const getServerData = async () => {
-        const isVerify = await userContext.isVeryfyToken();
+        const isVerify = await veryfyToken();
         if (!isVerify) {
             return;
         }
-        await axios.get(ServerDataService.apiUrl + "api/telegram/all/" + userContext.user.id + "/" + senderId + "/",
+        await axios.get(ServerDataService.apiUrl + "api/telegram/all/" + store.user.id + "/" + senderId + "/",
             {
-                headers: userContext.getAuthorizeData()
+                headers: getHeadAuthoriseData()
             })
             .then((response) => {
                 setMessages(ServerDataService.convertTelegramMessages(response.data));
@@ -43,12 +45,12 @@ const ChatComponent = () => {
     };
 
     const addMessage = async () => {
-        if (text.trim("") === "" || userContext.user.id === undefined) {
+        if (text.trim("") === "" || store.user.id === undefined) {
             return;
         }
         if (curIndex >= 0 && messages[curIndex] !== undefined
-            && messages[curIndex].userId === userContext.user.id && messages[curIndex].id > 0) {
-            const isVerify = await userContext.isVeryfyToken();
+            && messages[curIndex].userId === store.user.id && messages[curIndex].id > 0) {
+            const isVerify = await veryfyToken();
             if (!isVerify) {
                 return;
             }
@@ -56,11 +58,11 @@ const ChatComponent = () => {
                 new MessageUpdateModel(
                     messages[curIndex].id,
                     text,
-                    userContext.user.id,
+                    store.user.id,
                     messages[curIndex].senderId
                 ),
                 {
-                    headers: userContext.getAuthorizeData()
+                    headers: getHeadAuthoriseData()
                 })
                 .then((response) => {
                     console.log(response);
@@ -72,18 +74,18 @@ const ChatComponent = () => {
             await getServerData();
             return;
         }
-        const isVerify = await userContext.isVeryfyToken();
+        const isVerify = await veryfyToken();
         if (!isVerify) {
             return;
         }
         await axios.post(ServerDataService.apiUrl + "api/messages/add",
             new MessageCreateModel(
                 text,
-                userContext.user.id,
+                store.user.id,
                 senderId
             ),
             {
-                headers: userContext.getAuthorizeData()
+                headers: getHeadAuthoriseData()
             })
             .then((response) => {
                 console.log(response);
@@ -103,13 +105,13 @@ const ChatComponent = () => {
         if (!result) {
             return;
         }
-        const isVerify = await userContext.isVeryfyToken();
+        const isVerify = await veryfyToken();
         if (!isVerify) {
             return;
         }
         await axios.delete(ServerDataService.apiUrl + "api/messages/delete/" + messages[curIndex].id + "/",
             {
-                headers: userContext.getAuthorizeData()
+                headers: getHeadAuthoriseData()
             })
             .then((response) => {
                 console.log(response);
@@ -126,7 +128,7 @@ const ChatComponent = () => {
             cancelEdit();
             return;
         }
-        if (index < 0 || messages[index].userId !== userContext.user.id) {
+        if (index < 0 || messages[index].userId !== store.user.id) {
             return;
         }
         setIndex(index);
@@ -138,7 +140,7 @@ const ChatComponent = () => {
         setText("");
     };
 
-    let sendIcon = <SendIcon onClick={addMessage} sx={{cursor: "pointer"}} />;
+    let sendIcon = <SendIcon onClick={addMessage} sx={{ cursor: "pointer" }} />;
     return (
         <div className={styles.messages}>
             <div className={styles.messages_field}>
