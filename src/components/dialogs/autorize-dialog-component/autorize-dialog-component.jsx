@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Dialog from '@mui/material/Dialog';
 import PropTypes from 'prop-types';
 import { DialogTitle } from "@mui/material";
@@ -8,13 +8,14 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { UserContext } from "../../../contexts/user-context";
 import AuthorizeModel from "../../../models/AuthorizeModel";
 import axios from "axios";
 import ServerDataService from "../../../services/server-data.service";
+import { useDispatch } from 'react-redux';
+import { getServerUserData } from "../../../store/create-store";
 
 const AutorizeDialogComponent = ({ onClose, open }) => {
-    const userContext = useContext(UserContext);
+    const dispatch = useDispatch();
     const [authorizeModel, setAuth] = useState(new AuthorizeModel("", ""));
 
     const authHandle = async () => {
@@ -44,7 +45,8 @@ const AutorizeDialogComponent = ({ onClose, open }) => {
                 setAuth(new AuthorizeModel("", ""));
                 return;
             });
-        await userContext.getUserData();
+        const user = await getServerUserData();
+        dispatch({ type: "setUser", payload: user });
         onClose();
     }
 

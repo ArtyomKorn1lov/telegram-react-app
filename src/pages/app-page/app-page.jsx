@@ -2,7 +2,8 @@ import './app-page.scss';
 import React from 'react';
 import TelegramPage from '../telegram-page/telegram-page';
 import { ThemeProvider, createTheme } from '@mui/material';
-import { UserContextProvider } from '../../contexts/user-context';
+import { Provider } from 'react-redux';
+import { store } from '../../store/create-store';
 
 const theme = createTheme({
   multilineColor: {
@@ -12,15 +13,15 @@ const theme = createTheme({
 
 const AppPage = () => {
   return (
-    <ThemeProvider theme={theme} >
-      <UserContextProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme} >
         <div className="app">
           <header className="app__header">
             <TelegramPage />
           </header>
         </div>
-      </UserContextProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Provider>
   );
 }
 

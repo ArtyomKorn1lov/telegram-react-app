@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dialog from '@mui/material/Dialog';
 import PropTypes from 'prop-types';
 import { DialogTitle } from "@mui/material";
@@ -8,25 +8,27 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { UserContext } from "../../../contexts/user-context";
 import RegisterModel from "../../../models/RegisterModel";
 import axios from "axios";
 import ServerDataService from "../../../services/server-data.service";
+import { useSelector, useDispatch } from 'react-redux';
+import { veryfyToken, getHeadAuthoriseData, getServerUserData } from "../../../store/create-store";
 
 const RegisterDialogComponent = ({ onClose, open, edited }) => {
-    const userContext = useContext(UserContext);
+    const store = useSelector((state) => state);
+    const dispatch = useDispatch();
     const [registerModel, setRegister] = useState(new RegisterModel("", "", "", ""));
 
     useEffect(() => {
         if (edited) {
             setRegister(new RegisterModel(
-                userContext.user.login,
-                userContext.user.name,
+                store.user.login,
+                store.user.name,
                 "",
                 ""
             ));
         }
-    }, [edited, userContext.user.login, userContext.user.name])
+    }, [edited, store.user.login, store.user.name])
 
     const registerHandle = async () => {
         if (registerModel.login === undefined || registerModel.login.trim("") === "") {
@@ -68,7 +70,7 @@ const RegisterDialogComponent = ({ onClose, open, edited }) => {
                 setRegister({ ...setRegister, password: "", repeat_password: "" });
                 return;
             }
-            const isVerify = await userContext.isVeryfyToken();
+            const isVerify = await veryfyToken();
             if (!isVerify) {
                 return;
             }
@@ -80,7 +82,7 @@ const RegisterDialogComponent = ({ onClose, open, edited }) => {
                     registerModel.repeat_password
                 ),
                 {
-                    headers: userContext.getAuthorizeData()
+                    headers: getHeadAuthoriseData()
                 })
                 .then((response) => {
                     console.log(response);
@@ -90,7 +92,8 @@ const RegisterDialogComponent = ({ onClose, open, edited }) => {
                     onClose();
                     return;
                 });
-            await userContext.getUserData();
+            const user = await getServerUserData();
+            dispatch({ type: "setUser", payload: user });
             onClose();
             return;
         }
@@ -114,7 +117,8 @@ const RegisterDialogComponent = ({ onClose, open, edited }) => {
                 setRegister(new RegisterModel("", "", "", ""));
                 return;
             });
-        await userContext.getUserData();
+        const user = await getServerUserData();
+        dispatch({ type: "setUser", payload: user });
         onClose();
     };
 

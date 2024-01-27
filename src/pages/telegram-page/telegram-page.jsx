@@ -1,16 +1,18 @@
 import styles from './telegram-page.module.scss';
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Typography } from '@mui/material';
 import UsersComponent from '../../components/users-component/users-component';
 import RegisterDialogComponent from '../../components/dialogs/register-dialog-component/register-dialog-component';
 import AutorizeDialogComponent from '../../components/dialogs/autorize-dialog-component/autorize-dialog-component';
 import Button from '@mui/material/Button';
-import { UserContext } from '../../contexts/user-context';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getServerUserData } from '../../store/create-store';
 
 const TelegramPage = () => {
-    const userContext = useContext(UserContext);
+    const store = useSelector((state) => state);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [openRegistration, setOpenRegistration] = useState(false);
     const [openAutorization, setOpenAutorization] = useState(false);
@@ -26,17 +28,18 @@ const TelegramPage = () => {
 
     const onEscape = (event) => {
         if (event.key === "Escape") {
-            userContext.chatIdSetter(0);
+            dispatch({ type: "setChatId", payload: 0 });
             navigate(`/telegram`);
         }
     };
 
     const getUserData = async () => {
-        await userContext.getUserData();
+        const user = await getServerUserData();
+        dispatch({type: "setUser", payload: user});
     };
 
     const onLogOut = () => {
-        userContext.logOut();
+        dispatch({ type: "logOut" });
         navigate(`/telegram`);
     };
 
@@ -57,7 +60,7 @@ const TelegramPage = () => {
     };
 
     let isAuthorize = false;
-    if (userContext.user.name) {
+    if (store.user.id > 0) {
         isAuthorize = true;
     }
     return (
@@ -75,7 +78,7 @@ const TelegramPage = () => {
                         variant="body2"
                         color="white"
                     >
-                        Здравствуйте, {userContext.user.name}!
+                        Здравствуйте, {store.user.name}!
                     </Typography>
                 }
                 {isAuthorize && <Button onClick={() => onLogOut()} sx={{ marginLeft: '12px' }} variant="contained">Выйти</Button>}
