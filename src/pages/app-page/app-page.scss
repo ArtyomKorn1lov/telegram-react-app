@@ -1,0 +1,16 @@
+$app-center: center;
+
+.app {
+  text-align: $app-center;
+
+  &__header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: $app-center;
+    justify-content: $app-center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+}

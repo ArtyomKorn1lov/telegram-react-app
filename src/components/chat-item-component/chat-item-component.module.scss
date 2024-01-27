@@ -1,0 +1,57 @@
+.messages_item_left {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.messages_item_right {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.message_left {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    background: #1976d2;
+    max-width: 50%;
+    border-radius: 20px 20px 20px 0;
+    padding: 10px;
+    margin-bottom: 12px;
+}
+
+.message_left_selected {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    background: #43a1ff;
+    max-width: 50%;
+    border-radius: 20px 20px 20px 0;
+    padding: 10px;
+    margin-bottom: 12px;
+}
+
+.message_right {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    background: #1976d2;
+    max-width: 50%;
+    border-radius: 20px 20px 0 20px;
+    padding: 10px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.message_right_selected {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    background: #43a1ff;
+    max-width: 50%;
+    border-radius: 20px 20px 0 20px;
+    padding: 10px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
